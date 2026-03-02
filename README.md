@@ -9,12 +9,13 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org)
 [![Hosted](https://img.shields.io/badge/Hosted-mcp.philidor.io-green.svg)](https://mcp.philidor.io)
 [![smithery badge](https://smithery.ai/badge/philidor/defi)](https://smithery.ai/servers/philidor/defi)
+[![LobeHub](https://lobehub.com/badge/mcp/philidor-labs-philidor-mcp)](https://lobehub.com/mcp/philidor-labs-philidor-mcp)
 
-Search 700+ vaults across Morpho, Aave, Yearn, Beefy, Spark, and more. Compare risk scores, analyze protocols, run due diligence &mdash; all through natural language.
+Search 700+ DeFi vaults across Morpho, Aave, Yearn, Beefy, and Spark. Compare risk scores, analyze protocols, run due diligence &mdash; all through natural language.
 
 **No API key required. No installation needed.**
 
-[Quick Start](#quick-start) &bull; [Tools](#tools) &bull; [Example Prompts](#example-prompts) &bull; [Risk Framework](#risk-scoring)
+[Quick Start](#quick-start) &bull; [Tools](#tools) &bull; [Example Prompts](#example-prompts) &bull; [Risk Framework](#risk-scoring) &bull; [Agent Skill](#agent-skill)
 
 </div>
 
@@ -22,11 +23,11 @@ Search 700+ vaults across Morpho, Aave, Yearn, Beefy, Spark, and more. Compare r
 
 ## Why Philidor?
 
-Most DeFi data tools give you raw numbers. Philidor gives your AI agent **risk intelligence**.
+Most DeFi data tools give you raw numbers. Philidor gives your AI agent **institutional-grade risk intelligence**.
 
 | Feature | Philidor | DefiLlama MCP | Generic DeFi APIs |
 |---|:---:|:---:|:---:|
-| Vault risk scores (0-10) | :white_check_mark: | :x: | :x: |
+| Vault risk scores (0&ndash;10) | :white_check_mark: | :x: | :x: |
 | Risk vector decomposition | :white_check_mark: | :x: | :x: |
 | Vault comparison | :white_check_mark: | :x: | :x: |
 | Curator intelligence | :white_check_mark: | :x: | :x: |
@@ -70,7 +71,7 @@ claude mcp add philidor --transport http https://mcp.philidor.io/api/mcp
 
 ### Cursor
 
-Add to your MCP settings (`.cursor/mcp.json`):
+Add to `.cursor/mcp.json`:
 
 ```json
 {
@@ -115,6 +116,8 @@ npm start
 
 ## Tools
 
+10 tools for vault discovery, risk analysis, and protocol research.
+
 ### `search_vaults`
 
 Search and filter DeFi vaults by chain, protocol, asset, risk tier, TVL, and more.
@@ -123,7 +126,7 @@ Search and filter DeFi vaults by chain, protocol, asset, risk tier, TVL, and mor
 |---|---|---|
 | `query` | string | Search by vault name, symbol, asset, protocol, or curator |
 | `chain` | string | Filter by chain (Ethereum, Base, Arbitrum, ...) |
-| `protocol` | string | Filter by protocol ID (morpho, aave-v3, yearn-v3, ...) |
+| `protocol` | string | Filter by protocol ID (morpho, aave-v3, yearn-v3, beefy, spark) |
 | `asset` | string | Filter by asset symbol (USDC, WETH, ...) |
 | `riskTier` | string | Filter by risk tier: Prime, Core, or Edge |
 | `minTvl` | number | Minimum TVL in USD |
@@ -133,7 +136,7 @@ Search and filter DeFi vaults by chain, protocol, asset, risk tier, TVL, and mor
 
 ### `get_vault`
 
-Get detailed information about a specific vault including risk breakdown, recent events, and historical snapshots.
+Get detailed information about a specific vault including risk breakdown, recent events, and historical snapshots. Lookup by `id` or by `network` + `address`.
 
 | Parameter | Type | Description |
 |---|---|---|
@@ -143,7 +146,7 @@ Get detailed information about a specific vault including risk breakdown, recent
 
 ### `get_vault_risk_breakdown`
 
-Detailed breakdown of a vault's three risk vectors with sub-metrics: asset quality, platform code maturity, and governance controls.
+Detailed breakdown of a vault's three risk vectors with sub-metrics: asset quality, platform code maturity, and governance controls. Returns dimension-level scores, caps, hard-fail flags, and overrides.
 
 | Parameter | Type | Description |
 |---|---|---|
@@ -152,15 +155,15 @@ Detailed breakdown of a vault's three risk vectors with sub-metrics: asset quali
 
 ### `compare_vaults`
 
-Side-by-side comparison of 2-3 vaults on TVL, APR, risk score, risk tier, and audit status.
+Side-by-side comparison of 2&ndash;3 vaults on TVL, APR, risk score, risk tier, and audit status.
 
 | Parameter | Type | Description |
 |---|---|---|
-| `vaults` | array | Array of 2-3 objects with `network` and `address` |
+| `vaults` | array | Array of 2&ndash;3 objects with `network` and `address` |
 
 ### `find_safest_vaults`
 
-Find the top 10 audited vaults with the highest risk scores, optionally filtered by asset, chain, or TVL.
+Find the top 10 audited, high-confidence vaults sorted by risk score.
 
 | Parameter | Type | Description |
 |---|---|---|
@@ -194,7 +197,11 @@ Explain what a specific risk score means, including the tier, calculation method
 
 | Parameter | Type | Description |
 |---|---|---|
-| `score` | number | Risk score (0-10) |
+| `score` | number | Risk score (0&ndash;10) |
+
+### `list_vaults_with_incidents`
+
+List all vaults that had a recent critical incident (last 365 days). Sorted by TVL descending, then by recency. No parameters required.
 
 ---
 
@@ -202,7 +209,7 @@ Explain what a specific risk score means, including the tier, calculation method
 
 | URI | Description |
 |---|---|
-| `philidor://methodology` | The Vector Risk Framework v2.0 documentation |
+| `philidor://methodology` | The Vector Risk Framework v4.1 documentation |
 | `philidor://supported-chains` | Supported blockchain networks with vault counts |
 | `philidor://supported-protocols` | Supported DeFi protocols with TVL data |
 
@@ -221,6 +228,7 @@ Explain what a specific risk score means, including the tier, calculation method
 Once connected, try asking your AI assistant:
 
 **Discovery**
+
 > "Find the safest USDC vaults with at least $10M TVL"
 
 > "What Morpho vaults are available on Base?"
@@ -228,6 +236,7 @@ Once connected, try asking your AI assistant:
 > "Show me the DeFi market overview"
 
 **Analysis**
+
 > "Run due diligence on the Steakhouse USDC vault on Ethereum"
 
 > "Compare the top 3 USDC vaults by risk score"
@@ -235,6 +244,7 @@ Once connected, try asking your AI assistant:
 > "What's the risk breakdown for this vault: ethereum/0x..."
 
 **Portfolio**
+
 > "Assess my portfolio: 50% in Morpho Steakhouse USDC, 30% in Aave USDC, 20% in Yearn USDC"
 
 > "Which protocols have had security incidents?"
@@ -245,35 +255,42 @@ Once connected, try asking your AI assistant:
 
 ## Risk Scoring
 
-Philidor uses the **Vector Risk Framework** to decompose vault risk into three measurable vectors:
+Philidor uses the **Vector Risk Framework v4.1** to decompose vault risk into three measurable vectors:
 
 ```
 Final Score = 40% Asset + 40% Platform + 20% Governance
 ```
 
 ### Asset Composition (40%)
-Quality of underlying collateral. Blue-chip assets (ETH, USDC) score 10/10. Less liquid collateral scores lower.
+
+Quality of underlying collateral. Blue-chip assets (ETH, USDC) score highest. Factors include oracle reliability, liquidity depth, and peg stability.
 
 ### Platform Code (40%)
+
 Code maturity measured by:
-- **Lindy Score** &mdash; time-based safety (>2 years = ~9/10)
-- **Audit Density** &mdash; number and type of audits
+
+- **Lindy Score** &mdash; time-based safety (>2 years &asymp; 9/10)
+- **Audit Density** &mdash; number and quality of audits
 - **Dependency Risk** &mdash; multiplicative penalties for risky dependencies
 - **Incident Penalty** &mdash; caps score after security incidents
 
 ### Governance (20%)
+
 Exit window for users:
-- Immutable contract: 10/10
-- 7+ day timelock: 9/10
-- No timelock: 1/10
+
+| Control | Score |
+|---|---|
+| Immutable contract | 10/10 |
+| 7+ day timelock | 9/10 |
+| No timelock | 1/10 |
 
 ### Risk Tiers
 
 | Tier | Score | Meaning |
 |---|---|---|
-| **Prime** | 8.0 - 10.0 | Institutional-grade &mdash; mature code, multiple audits, safe governance |
-| **Core** | 5.0 - 7.9 | Moderate safety &mdash; audited but newer or flexible governance |
-| **Edge** | 0.0 - 4.9 | Higher risk &mdash; requires careful due diligence |
+| **Prime** | 8.0&ndash;10.0 | Institutional-grade &mdash; mature code, multiple audits, safe governance |
+| **Core** | 5.0&ndash;7.9 | Moderate safety &mdash; audited but newer or flexible governance |
+| **Edge** | 0.0&ndash;4.9 | Higher risk &mdash; requires careful due diligence |
 
 ---
 
@@ -284,7 +301,7 @@ Exit window for users:
 │  Claude / Cursor  │────▶│  Philidor MCP   │────▶│ Philidor API │
 │  Windsurf / etc.  │◀────│  Server         │◀────│              │
 └──────────────────┘     └─────────────────┘     └──────┬───────┘
-                          9 tools, 3 resources,          │
+                          10 tools, 3 resources,         │
                           3 prompts                      │
                                                    ┌────▼────┐
                                                    │ On-chain │
@@ -295,13 +312,32 @@ Exit window for users:
 - **Transport**: Streamable HTTP (remote) or stdio (local/Docker)
 - **API**: Calls the [Philidor Public API](https://api.philidor.io/v1/docs) &mdash; no API key needed
 - **Stateless**: Fresh server instance per request, no session state
-- **Data**: 700+ vaults across Ethereum, Base, Polygon, Gnosis, and more
+- **Data**: 700+ vaults across Ethereum, Base, Arbitrum, Polygon, Optimism, and Avalanche
+
+---
+
+## Agent Skill
+
+Install the Philidor MCP skill into your coding agent via [skills.sh](https://skills.sh):
+
+```bash
+npx skills add philidor-labs/philidor-mcp
+```
+
+This gives your agent full knowledge of all tools, resources, prompts, recommended workflows, and best practices for DeFi vault analysis.
+
+### Also Available
+
+| Interface | Description | Link |
+|---|---|---|
+| **CLI** | Terminal-based vault intelligence &mdash; scriptable, pipeable, agent-sandboxed | [philidor-cli](https://github.com/Philidor-Labs/philidor-cli) |
+| **OpenClaw Skill** | Skill definition for the OpenClaw agent platform | [npm](https://www.npmjs.com/package/@philidorlabs/openclaw-skill) |
 
 ---
 
 ## Supported Protocols
 
-Morpho, Aave v3, Yearn v3, Beefy, Spark, Fluid, Euler &mdash; with more being added regularly.
+Morpho, Aave v3, Yearn v3, Beefy, Spark &mdash; with more being added regularly.
 
 See the full list at [app.philidor.io](https://app.philidor.io).
 
@@ -316,7 +352,7 @@ npm install
 npm start
 ```
 
-The server connects to the public Philidor API by default. To use a custom API endpoint:
+The server connects to the public Philidor API by default. To use a custom endpoint:
 
 ```bash
 PHILIDOR_API_URL=http://localhost:3003 npm start
@@ -327,11 +363,12 @@ PHILIDOR_API_URL=http://localhost:3003 npm start
 ## Links
 
 - [Philidor Analytics](https://app.philidor.io) &mdash; explore vaults and risk scores
+- [Philidor CLI](https://github.com/Philidor-Labs/philidor-cli) &mdash; terminal-based vault intelligence
 - [API Documentation](https://api.philidor.io/v1/docs) &mdash; OpenAPI/Swagger docs
 - [Risk Methodology](https://app.philidor.io/methodology) &mdash; how scores are calculated
+- [Smithery](https://smithery.ai/servers/philidor/defi) &mdash; MCP server registry
 - [Twitter](https://twitter.com/philidorlabs) &mdash; updates and announcements
 
 ## License
 
 [MIT](LICENSE)
-[![MCP Badge](https://lobehub.com/badge/mcp/philidor-labs-philidor-mcp)](https://lobehub.com/mcp/philidor-labs-philidor-mcp)
